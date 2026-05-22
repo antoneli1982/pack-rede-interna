@@ -573,6 +573,14 @@ function idbSet(k,v){
   });
 }
 
+/* ===== FALLBACK: localStorage — funciona em redes corporativas onde IndexedDB é bloqueado ===== */
+function lsGet(k){
+  try{return localStorage.getItem(k);}catch(e){return null;}
+}
+function lsSet(k,v){
+  try{localStorage.setItem(k,v);return true;}catch(e){return false;}
+}
+
 /* ===== detecção e inicialização do backend ===== */
 function firebaseConfigurado(){
   return typeof firebase!=="undefined" &&
@@ -590,7 +598,15 @@ async function initDB(){
     }catch(e){console.warn("Firebase:",e);}
   }
   if(typeof indexedDB!=="undefined"){
-    try{idb=await openIDB();backend="idb";return;}catch(e){}
+    try{idb=await openIDB();backend="idb";return;}catch(e){console.warn("IndexedDB indisponivel, tentando localStorage:",e);}
+  }
+  if(typeof localStorage!=="undefined"){
+    try{
+      localStorage.setItem("_sas_test","1");
+      localStorage.removeItem("_sas_test");
+      backend="ls";
+      return;
+    }catch(e){console.warn("localStorage bloqueado:",e);}
   }
   if(typeof window!=="undefined"&&window.storage){backend="storage";return;}
   backend="mem";
@@ -598,6 +614,7 @@ async function initDB(){
 async function dbLoad(){
   try{
     if(backend==="idb"){const v=await idbGet(KEY);return v?JSON.parse(v):[];}
+    if(backend==="ls"){const v=lsGet(KEY);return v?JSON.parse(v):[];}
     if(backend==="storage"){const r=await window.storage.get(KEY);return r&&r.value?JSON.parse(r.value):[];}
   }catch(e){}
   return [];
@@ -605,13 +622,15 @@ async function dbLoad(){
 async function dbSave(){
   try{
     if(backend==="idb"){await idbSet(KEY,JSON.stringify(registros));return true;}
+    if(backend==="ls"){return lsSet(KEY,JSON.stringify(registros));}
     if(backend==="storage"){await window.storage.set(KEY,JSON.stringify(registros));return true;}
   }catch(e){}
   return false;
 }
 function statusTxt(){
   if(backend==="firebase")return "● Conectado ao Firebase — "+registros.length+" registro(s) sincronizados em todos os computadores";
-  if(backend==="idb")return "● Banco de dados local ativo — "+registros.length+" registro(s) salvos neste computador";
+  if(backend==="idb")return "● Banco de dados local ativo (IndexedDB) — "+registros.length+" registro(s) salvos neste computador";
+  if(backend==="ls")return "● Banco de dados local ativo (localStorage) — "+registros.length+" registro(s) salvos neste navegador";
   if(backend==="storage")return "● Armazenamento do aplicativo ativo — "+registros.length+" registro(s)";
   return "● Atenção: dados apenas nesta sessão — exporte para Excel antes de fechar";
 }
