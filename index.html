@@ -187,6 +187,68 @@
   .loading{padding:40px;text-align:center;color:var(--txt-dim);
     font-family:'Segoe UI',system-ui,-apple-system,Roboto,'Helvetica Neue',Arial,sans-serif;font-size:12px}
 
+  /* ===== MODAL EXPORTAÇÃO REDE ===== */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);
+    z-index:9999;align-items:center;justify-content:center;padding:20px}
+  .modal-overlay.on{display:flex}
+  .modal-box{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    width:100%;max-width:520px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.7)}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;
+    padding:16px 20px;border-bottom:1px solid var(--line)}
+  .modal-head h3{font-size:14px;font-weight:700;letter-spacing:.3px;display:flex;align-items:center;gap:10px}
+  .modal-head h3 span.modal-icon{font-size:18px}
+  .modal-close{cursor:pointer;background:none;border:none;color:var(--txt-dim);
+    font-size:18px;padding:4px 8px;border-radius:4px;transition:.12s}
+  .modal-close:hover{color:var(--red);background:rgba(240,83,63,.12)}
+  .modal-body{padding:20px}
+  .modal-info{background:rgba(56,102,247,.08);border:1px solid rgba(56,102,247,.25);
+    border-radius:8px;padding:12px 14px;margin-bottom:18px;font-size:11px;
+    color:var(--txt-dim);line-height:1.7}
+  .modal-info strong{color:var(--blue-soft)}
+  .modal-steps{margin-bottom:18px}
+  .step-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+  .step-num{min-width:22px;height:22px;border-radius:50%;background:var(--blue);
+    color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;
+    justify-content:center;margin-top:1px;flex-shrink:0}
+  .step-txt{font-size:11.5px;color:var(--txt-dim);line-height:1.6}
+  .step-txt strong{color:var(--txt)}
+  .net-path-field{margin-bottom:14px}
+  .net-path-field label{display:block;font-size:10px;font-weight:600;
+    text-transform:uppercase;letter-spacing:1.2px;color:var(--txt-dim);margin-bottom:7px}
+  .net-path-wrap{display:flex;gap:8px}
+  .net-path-wrap input{flex:1;background:var(--panel-2);border:1px solid var(--line);
+    color:var(--txt);border-radius:6px;padding:10px 11px;font-size:13px;
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,'Helvetica Neue',Arial,sans-serif;transition:.13s}
+  .net-path-wrap input:focus{outline:none;border-color:var(--blue);background:#212a35}
+  .net-fname-field{margin-bottom:18px}
+  .net-fname-field label{display:block;font-size:10px;font-weight:600;
+    text-transform:uppercase;letter-spacing:1.2px;color:var(--txt-dim);margin-bottom:7px}
+  .net-fname-field input{width:100%;background:var(--panel-2);border:1px solid var(--line);
+    color:var(--txt);border-radius:6px;padding:10px 11px;font-size:13px;
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,'Helvetica Neue',Arial,sans-serif;transition:.13s}
+  .net-fname-field input:focus{outline:none;border-color:var(--blue);background:#212a35}
+  .path-example{font-size:10px;color:var(--txt-faint);margin-top:5px;font-family:monospace}
+  .modal-actions{display:flex;gap:8px;flex-wrap:wrap}
+  .btn-net-save{flex:1;cursor:pointer;border:none;border-radius:7px;
+    background:var(--green);color:#fff;font-weight:700;font-size:13px;
+    letter-spacing:.5px;padding:12px;text-transform:uppercase;
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,'Helvetica Neue',Arial,sans-serif;transition:.13s}
+  .btn-net-save:hover{background:#4cd166}
+  .btn-net-dl{flex:1;cursor:pointer;border:1px solid var(--blue);border-radius:7px;
+    background:transparent;color:var(--blue-soft);font-weight:700;font-size:13px;
+    letter-spacing:.5px;padding:12px;text-transform:uppercase;
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,'Helvetica Neue',Arial,sans-serif;transition:.13s}
+  .btn-net-dl:hover{background:rgba(56,102,247,.1)}
+  .modal-status{margin-top:12px;min-height:18px;font-size:11px;font-weight:600;
+    text-align:center;letter-spacing:.3px}
+  .modal-status.ok{color:var(--green)}
+  .modal-status.err{color:var(--red)}
+  .modal-status.info{color:var(--blue-soft)}
+  .api-badge{display:inline-block;font-size:9px;font-weight:600;padding:2px 6px;
+    border-radius:3px;margin-left:6px;vertical-align:middle}
+  .api-badge.ok{background:rgba(63,185,80,.2);color:var(--green)}
+  .api-badge.no{background:rgba(240,83,63,.15);color:var(--red)}
+
   .dash-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px}
   .dash-grid>*{min-width:0}
   @media(max-width:840px){.dash-grid{grid-template-columns:minmax(0,1fr)}}
@@ -392,6 +454,7 @@
             <button class="btn-ghost" id="f-clear" title="Limpar pesquisa">✕ Limpar</button>
             <div class="spacer"></div>
             <button class="btn-ghost xls" id="btn-xls">⤓ Exportar Excel</button>
+            <button class="btn-ghost" id="btn-net" style="border-color:#00b8a3;color:#00b8a3" title="Salvar Excel em caminho de rede">⇗ Enviar Rede</button>
             <button class="btn-ghost" id="btn-csv">⤓ CSV</button>
             <button class="btn-ghost danger" id="btn-clear">Limpar tudo</button>
           </div>
@@ -1235,6 +1298,179 @@ function renderDash(){
 }
 
 load();
+
+/* ============ EXPORTAÇÃO VIA REDE ============ */
+(function(){
+  const fsaSupported = ('showSaveFilePicker' in window);
+
+  /* ---- injeta modal no DOM ---- */
+  const modalHTML = `
+  <div class="modal-overlay" id="modal-net">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3><span class="modal-icon">🗂️</span> Exportar Excel para Pasta de Rede
+          <span class="api-badge ${fsaSupported?'ok':'no'}" id="fsa-badge">
+            ${fsaSupported?'File System API ✓':'Modo Download'}
+          </span>
+        </h3>
+        <button class="modal-close" id="modal-net-close">✕</button>
+      </div>
+      <div class="modal-body">
+
+        <div class="modal-info">
+          <strong>Como funciona:</strong> O arquivo <code>.xlsx</code> é gerado localmente no navegador
+          e salvo diretamente na pasta de rede que você escolher.
+          ${fsaSupported
+            ? 'Seu navegador suporta o <strong>File System Access API</strong> — será aberto o seletor de arquivo do sistema operacional, onde você pode navegar até qualquer pasta mapeada (incluindo unidades de rede <code>\\\\servidor\\pasta</code>).'
+            : 'Seu navegador não suporta o File System Access API. O arquivo será baixado normalmente — mova-o manualmente para a pasta de rede.'}
+        </div>
+
+        <div class="modal-steps">
+          <div class="step-row">
+            <div class="step-num">1</div>
+            <div class="step-txt">
+              ${fsaSupported
+                ? 'Informe o <strong>nome do arquivo</strong> abaixo (opcional — você pode alterar no seletor).'
+                : 'Informe o <strong>caminho de rede</strong> apenas como referência (será copiado para a área de transferência).'}
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num">2</div>
+            <div class="step-txt">
+              ${fsaSupported
+                ? 'Clique em <strong>Salvar na Rede</strong> → o seletor de arquivo abrirá → navegue até a pasta de rede mapeada → confirme.'
+                : 'Clique em <strong>Baixar Excel</strong> → mova o arquivo para a pasta <code>\\\\servidor\\pasta</code>.'}
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num">3</div>
+            <div class="step-txt">O arquivo <code>.xlsx</code> com <strong>Apontamentos + Dashboard + Gráficos</strong> estará pronto para abrir no Excel.</div>
+          </div>
+        </div>
+
+        <div class="net-path-field">
+          <label>Caminho de Rede (referência / destino)</label>
+          <div class="net-path-wrap">
+            <input type="text" id="net-path-input"
+              placeholder="Ex: \\\\servidor\\compartilhado\\SAS\\Lavadora"
+              title="Caminho UNC ou letra de unidade mapeada">
+          </div>
+          <div class="path-example">Exemplos: \\\\SRV-PROD\\Producao\\Lavadora &nbsp;·&nbsp; Z:\\SAS\\Apontamentos &nbsp;·&nbsp; /mnt/rede/lavadora</div>
+        </div>
+
+        <div class="net-fname-field">
+          <label>Nome do Arquivo <span style="color:var(--txt-faint);font-weight:400;text-transform:none;letter-spacing:0">(sem extensão)</span></label>
+          <input type="text" id="net-fname-input"
+            value="SAS-Lavadora-Embalagem"
+            placeholder="SAS-Lavadora-Embalagem">
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-net-save" id="btn-net-exec">
+            ${fsaSupported ? '🗂️  Salvar na Rede' : '⤓  Baixar Excel'}
+          </button>
+          <button class="btn-net-dl" id="btn-net-copy">
+            ${fsaSupported ? '⤓  Baixar Local' : '📋  Copiar Caminho'}
+          </button>
+        </div>
+        <div class="modal-status" id="net-status"></div>
+      </div>
+    </div>
+  </div>`;
+
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+  function openModal(){
+    if(!registros.length){ alert('Não há apontamentos para exportar.'); return; }
+    /* auto-fill nome com data de hoje */
+    const pad=n=>String(n).padStart(2,'0'), now=new Date();
+    const hoje=now.getFullYear()+pad(now.getMonth()+1)+pad(now.getDate());
+    document.getElementById('net-fname-input').value='SAS-Lavadora-'+hoje;
+    document.getElementById('net-status').textContent='';
+    document.getElementById('net-status').className='modal-status';
+    document.getElementById('modal-net').classList.add('on');
+  }
+  function closeModal(){
+    document.getElementById('modal-net').classList.remove('on');
+  }
+
+  document.getElementById('btn-net').addEventListener('click', openModal);
+  document.getElementById('modal-net-close').addEventListener('click', closeModal);
+  document.getElementById('modal-net').addEventListener('click', e=>{
+    if(e.target===document.getElementById('modal-net')) closeModal();
+  });
+
+  function getFileName(){
+    const raw=(document.getElementById('net-fname-input').value||'SAS-Lavadora').trim();
+    return raw.endsWith('.xlsx') ? raw : raw+'.xlsx';
+  }
+  function setStatus(msg, type){
+    const el=document.getElementById('net-status');
+    el.textContent=msg; el.className='modal-status '+(type||'');
+  }
+
+  /* botão principal: File System Access API ou download */
+  document.getElementById('btn-net-exec').addEventListener('click', async ()=>{
+    if(!registros.length){ setStatus('Nenhum apontamento para exportar.','err'); return; }
+    const fname=getFileName();
+    const bytes=buildXLSX();
+    const blob=new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+
+    if(fsaSupported){
+      try{
+        setStatus('Abrindo seletor de arquivo…','info');
+        const handle=await window.showSaveFilePicker({
+          suggestedName: fname,
+          types:[{description:'Excel Workbook',accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx']}}],
+          startIn: 'documents'
+        });
+        const writable=await handle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+        setStatus('✓ Arquivo salvo com sucesso: '+handle.name,'ok');
+      } catch(err){
+        if(err.name==='AbortError'){
+          setStatus('Cancelado pelo usuário.','');
+        } else {
+          setStatus('Erro ao salvar: '+err.message,'err');
+        }
+      }
+    } else {
+      /* fallback: download normal */
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob);
+      a.download=fname;
+      document.body.appendChild(a); a.click();
+      setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500);
+      setStatus('✓ Download iniciado — mova o arquivo para a pasta de rede.','ok');
+    }
+  });
+
+  /* botão secundário */
+  document.getElementById('btn-net-copy').addEventListener('click', async ()=>{
+    if(fsaSupported){
+      /* no modo FSA, o secundário faz download local simples */
+      if(!registros.length){ setStatus('Nenhum apontamento para exportar.','err'); return; }
+      const blob=new Blob([buildXLSX()],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob);
+      a.download=getFileName();
+      document.body.appendChild(a); a.click();
+      setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500);
+      setStatus('✓ Download local iniciado.','ok');
+    } else {
+      /* no modo fallback, copia caminho */
+      const path=document.getElementById('net-path-input').value.trim();
+      if(!path){ setStatus('Informe o caminho de rede primeiro.','err'); return; }
+      try{
+        await navigator.clipboard.writeText(path);
+        setStatus('✓ Caminho copiado para a área de transferência!','ok');
+      } catch(e){
+        setStatus('Não foi possível copiar. Copie manualmente.','err');
+      }
+    }
+  });
+})();
 </script>
 </body>
 </html>
