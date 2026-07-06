@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulador Industrial - Linha de Produção</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#0b1018;font-family:Arial}
+#panel{position:absolute;left:16px;top:16px;color:#fff;background:rgba(15,22,35,.78);padding:16px;border-radius:10px;z-index:10}
+button{padding:10px 18px;border:none;border-radius:8px;background:#00c8ff;color:#fff;cursor:pointer}
+small{color:#9fb3c8}
+</style>
+<script type="importmap">
+{
+"imports":{
+"three":"https://unpkg.com/three@0.160.0/build/three.module.js",
+"three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"
+}}
+</script>
+</head>
+<body>
+<div id="panel">
+<h2>Digital Twin - Floor Painting Robot</h2>
+<small>Linha de produção simulada • Robô autônomo • Faixas industriais</small><br><br>
+<button onclick="start()">Iniciar Simulação</button>
+</div>
+<script type="module">
+import * as THREE from "three";
+import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x0b1018);
+const camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,300);
+camera.position.set(28,22,28);
+
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+renderer.shadowMap.enabled=true;
+document.body.appendChild(renderer.domElement);
+
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.target.set(0,0,0);
+
+scene.add(new THREE.HemisphereLight(0xffffff,0x404040,1.5));
+const d=new THREE.DirectionalLight(0xffffff,2);
+d.position.set(30,40,20);
+d.castShadow=true;
+scene.add(d);
+
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(60,40),new THREE.MeshStandardMaterial({color:0x2f353d}));
+floor.rotation.x=-Math.PI/2;
+floor.receiveShadow=true;
+scene.add(floor);
+scene.add(new THREE.GridHelper(60,60,0x00ffff,0x555555));
+
+function machine(x,z,w,h,d,col){
+ const g=new THREE.Group();
+ const body=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshStandardMaterial({color:col,metalness:.6,roughness:.4}));
+ body.position.y=h/2;
+ body.castShadow=true;
+ g.add(body);
+ const arm=new THREE.Mesh(new THREE.BoxGeometry(.4,2,.4),new THREE.MeshStandardMaterial({color:0xff9900}));
+ arm.position.set(w/2-.3,h+1,0);
+ g.add(arm);
+ g.position.set(x,0,z);
+ scene.add(g);
+}
+for(let i=-22;i<=22;i+=11){
+ machine(i,-12,4,3,3,0x5b6b7d);
+ machine(i,12,4,3,3,0x5b6b7d);
+}
+for(let z=-8;z<=8;z+=8){
+ const belt=new THREE.Mesh(new THREE.BoxGeometry(40,.2,2),new THREE.MeshStandardMaterial({color:0x444}));
+ belt.position.set(0,.11,z);
+ scene.add(belt);
+}
+
+const robot=new THREE.Group();
+robot.add(new THREE.Mesh(new THREE.CylinderGeometry(.8,.9,.5,32),new THREE.MeshStandardMaterial({color:0x00d8ff})));
+const cabin=new THREE.Mesh(new THREE.BoxGeometry(1.2,.8,1),new THREE.MeshStandardMaterial({color:0xececec}));
+cabin.position.y=.65;
+robot.add(cabin);
+const nozzle=new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,.5),new THREE.MeshStandardMaterial({color:0xffd400}));
+nozzle.rotation.z=Math.PI/2;
+nozzle.position.set(0,-.1,.6);
+robot.add(nozzle);
+scene.add(robot);
+
+const path=[[-25,-17],[25,-17],[25,-13],[-25,-13],[-25,-9],[25,-9],[25,-5],[-25,-5],[-25,-1],[25,-1],[25,3],[-25,3],[-25,7],[25,7],[25,11],[-25,11],[ -25,15],[25,15]];
+let run=false,idx=0;
+window.start=()=>run=true;
+
+function stripe(x,z){
+ const s=new THREE.Mesh(new THREE.PlaneGeometry(.45,.45),new THREE.MeshBasicMaterial({color:0xffe000}));
+ s.rotation.x=-Math.PI/2;
+ s.position.set(x,.01,z);
+ scene.add(s);
+}
+
+function animate(){
+ requestAnimationFrame(animate);
+ controls.update();
+ if(run){
+   let [tx,tz]=path[idx];
+   let dx=tx-robot.position.x,dz=tz-robot.position.z;
+   let dist=Math.hypot(dx,dz);
+   if(dist>.06){
+      robot.position.x+=dx*.018;
+      robot.position.z+=dz*.018;
+      robot.rotation.y=Math.atan2(dx,dz);
+      stripe(robot.position.x,robot.position.z);
+   }else{
+      idx++;
+      if(idx>=path.length){run=false;idx=0;}
+   }
+ }
+ renderer.render(scene,camera);
+}
+animate();
+addEventListener("resize",()=>{
+camera.aspect=innerWidth/innerHeight;
+camera.updateProjectionMatrix();
+renderer.setSize(innerWidth,innerHeight);
+});
+</script>
+</body>
+</html>
