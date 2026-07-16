@@ -14,8 +14,8 @@
  --ok:#41c976;--warn:#e5b04a;--info:#63a4e0;--idle:#66727f}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 Inter,"Segoe UI",system-ui,Arial,sans-serif;-webkit-font-smoothing:antialiased}
-.app{min-height:100vh;display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:18px;padding:18px}
-.stage-shell{min-width:0;display:grid;place-items:center;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--stage-bg);padding:2.8% 2.8% 4.4%;box-shadow:0 24px 64px rgba(0,0,0,.5)}
+.app{min-height:100vh;display:grid;grid-template-columns:minmax(0,1fr) 318px;gap:14px;padding:12px}
+.stage-shell{min-width:0;display:grid;place-items:center;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--stage-bg);padding:1.2% 1.2% 2%;box-shadow:0 24px 64px rgba(0,0,0,.5)}
 .stage{position:relative;width:100%;aspect-ratio:16/9;transform-origin:50% 60%;transition:transform .45s cubic-bezier(.22,1,.36,1),filter .45s ease;box-shadow:0 16px 34px rgba(0,0,0,.55);border-radius:6px}
 .stage.perspective{transform:perspective(1100px) rotateX(8deg) scale(.96);filter:saturate(1.05) contrast(1.02)}
 .map{display:block;width:100%;height:100%;user-select:none;-webkit-user-drag:none;border-radius:inherit}
@@ -418,7 +418,7 @@ body.safety-open-body{overflow:hidden}
    <div class="legend-list" id="legendList"></div>
   </details>
   
-  <p class="note">Os círculos no mapa são clicáveis. O caminhão permanece exclusivamente nos corredores viários; o marcador indica o portão e a parada ocorre na faixa de acesso adjacente.</p>
+  
  </aside>
 </main>
 <script>
